@@ -1,0 +1,67 @@
+FUNCTION_BLOCK runSquare
+VAR_INPUT
+	speedInput : REAL; //Speed of motors
+	startMove : BOOL;
+	sideLenghtInputY : REAL;
+	sideLenghtInputX : REAL;
+END_VAR
+VAR_OUTPUT
+	movingSucsess : BOOL; //Movement was sucsessful
+	currentPos : REAL[2]; //Current position of [x, y]
+END_VAR
+VAR
+	sideLengthX := REAL := 1.0; 
+	sideLengthY := REAL := 1.5; 
+	motorSpeed : REAL;
+	distnaceTravlled : REAL := 0.0; //Set to 0 since motor has not travled when started
+	xPos, yPos : REAL := 0.0; //Coordinates for movement, ignoring zPos since square will move in XY-plane
+	moving : BOOL := FALSE; //Is robot moving
+	state : INT := 0;
+END_VAR
+
+
+sideLenghtX := sideLenghtInputX;
+sideLenghtY := sideLenghtInputY;
+
+IF startMove THEN
+	CASE state OF
+		0:
+			xPos := xPos + sideLenghtX;
+			state := 1;
+			
+		1:
+			IF xPos >= sideLenghtX THEN
+				xPos := sideLenghtX;
+				yPOs := yPos + sideLenghtY;
+				state := 2;				
+			END_IF
+		
+		2:
+			IF yPos >= sideLenghtY THEN
+				yPos := sideLenghtY;
+				xPos := xPos - sideLenghtX;
+				state := 3;
+			END_IF
+			
+		3:
+			IF xPos <= 0 THEN
+				xPos := 0;
+				yPos := yPos - sideLenghtY;
+				state := 4;
+			END_IF
+			
+		4:
+			IF yPos <= 0 THEN
+				yPos := 0;
+				state := 0;
+			END_IF
+	END_CASE
+	moving := TRUE;
+ELSE 
+	state := 0;
+	moving := FALSE;
+END_IF
+currentPos[0] := xPos;
+currentPos[1] := yPos;
+
+
