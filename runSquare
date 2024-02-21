@@ -19,6 +19,7 @@ VAR
 	state : INT := 0;
 END_VAR
 
+###################################################################################
 
 sideLenghtX := sideLenghtInputX;
 sideLenghtY := sideLenghtInputY;
