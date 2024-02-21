@@ -1,0 +1,36 @@
+FUNCTION_BLOCK runCircle
+VAR_INPUT
+	startMove : BOOL;
+END_VAR
+VAR_OUTPUT
+	currentPos : REAL[2]; //Current pos of robot [X, Y]
+END_VAR
+VAR
+	radius : REAL := 1.0; //Radius of circle
+	motorSpeed : REAL := 1.0; //Speed of motor
+	xCenter : REAL := 0.0// X cordinates of the circle of the robot
+	yCenter : REAL := 0.0// Y cordinates of the circle of the robot
+	xPos : REAL := 0.0; //X cordinates of the x position
+	yPos : REAL := 0.0; //Y cordinates of the x position
+	angle : REAL := 0.0 // Angle of rotation
+	moving : BOOL; //State of robot movment
+	angularSPeed : REAL := 0.0;// angular speed of rotation in radians
+	deltaTIme : REAL := 0.0; // Time step
+END_VAR
+
+####################################################################################################
+
+IF startMove THEN
+	angularSpeed := motorSpeed / radius; //angular speed = linear speed / radius
+	
+	angle := angle + angularSpeed * deltaTime;
+	
+	xPos := xCenter + radius * COS(angle);
+	yPos := yCenter + radius * SIN(angle);
+	
+	moving := TRUE;
+	
+END_IF
+	moving := FALSE;
+	currentPos[1] := xPos;
+	currebtPos[2] := yPos;
