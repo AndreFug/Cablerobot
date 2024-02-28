@@ -7,11 +7,11 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	movingSucsess : BOOL; //Movement was sucsessful
-	currentPos : REAL[2]; //Current position of [x, y]
+	currentPos : ARRAY [0..1] OF REAL; //Current position of [x, y]
 END_VAR
 VAR
-	sideLengthX := REAL := 1.0; 
-	sideLengthY := REAL := 1.5; 
+	sideLengthX : REAL := 50; 
+	sideLengthY : REAL := 40; 
 	motorSpeed : REAL;
 	distnaceTravlled : REAL := 0.0; //Set to 0 since motor has not travled when started
 	xPos, yPos : REAL := 0.0; //Coordinates for movement, ignoring zPos since square will move in XY-plane
@@ -21,33 +21,33 @@ END_VAR
 
 ###################################################################################
 
-sideLenghtX := sideLenghtInputX;
-sideLenghtY := sideLenghtInputY;
+sideLengthX := sideLenghtInputX;
+sideLengthY := sideLenghtInputY;
 
 IF startMove THEN
 	CASE state OF
 		0:
-			xPos := xPos + sideLenghtX;
+			xPos := xPos + sideLengthX;
 			state := 1;
 			
 		1:
-			IF xPos >= sideLenghtX THEN
-				xPos := sideLenghtX;
-				yPOs := yPos + sideLenghtY;
+			IF xPos >= sideLengthX THEN
+				xPos := sideLengthX;
+				yPOs := yPos + sideLengthY;
 				state := 2;				
 			END_IF
 		
 		2:
-			IF yPos >= sideLenghtY THEN
-				yPos := sideLenghtY;
-				xPos := xPos - sideLenghtX;
+			IF yPos >= sideLengthY THEN
+				yPos := sideLengthY;
+				xPos := xPos - sideLengthX;
 				state := 3;
 			END_IF
 			
 		3:
 			IF xPos <= 0 THEN
 				xPos := 0;
-				yPos := yPos - sideLenghtY;
+				yPos := yPos - sideLengthY;
 				state := 4;
 			END_IF
 			
