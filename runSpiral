@@ -1,0 +1,53 @@
+FUNCTION_BLOCK runSpiral
+VAR_INPUT
+    radiusInput : REAL;
+    heightStep : REAL; // Step size for height increase/decrease
+    startMove : BOOL;
+END_VAR
+VAR_OUTPUT
+    currentPos : ARRAY [0..2] OF REAL; // Current pos of robot [X, Y, Z]
+END_VAR
+VAR
+    radius : REAL; // Radius of spiral
+    motorSpeed : REAL := 5.0; // Speed of motor
+    xCenter : REAL := 0.0; // X coordinate of the circle of the robot
+    yCenter : REAL := 0.0; // Y coordinate of the circle of the robot
+    zCenter : REAL := 0.0; // Z coordinate of the circle of the robot
+    xPos : REAL := 0.0; // X coordinate of the current position
+    yPos : REAL := 0.0; // Y coordinate of the current position
+    zPos : REAL := 0.0; // Z coordinate of the current position
+    angle : REAL := 45.0; // Angle of rotation, in radians
+    moving : BOOL; // State of robot movement
+    angularSpeed : REAL; // Angular speed of rotation in radians
+    deltaTime : REAL := 0.5; // Time step
+	PI : REAL := 3.14159265359;	
+END_VAR
+
+
+#######################################################
+
+radius := radiusInput;
+
+IF startMove THEN
+    angularSpeed := motorSpeed / radius; // Angular speed = linear speed / radius
+    
+    angle := angle + angularSpeed * deltaTime;
+    
+    xPos := xCenter + radius * COS(angle);
+    yPos := yCenter + radius * SIN(angle);
+    
+    // Calculate height based on angle direction
+    IF angle > 2 * PI THEN
+        zPos := zCenter + (2 * PI - angle) * heightStep; // Decrease height as angle approaches 0
+    ELSE
+        zPos := zCenter + angle * heightStep; // Increase height as angle increases
+    END_IF
+    
+    moving := TRUE;
+ELSE
+    moving := FALSE;
+END_IF
+
+currentPos[0] := xPos;
+currentPos[1] := yPos;
+currentPos[2] := zPos;
